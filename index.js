@@ -4,7 +4,7 @@ const cors=require('cors');
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const ObjectId=require('mongodb').ObjectId;
-const port=process.env.local || 5000
+const port=process.env.Port || 5000
 var admin = require("firebase-admin");
 
 
