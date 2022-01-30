@@ -3,12 +3,12 @@ const app=express();
 const cors=require('cors');
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
+const ObjectId=require('mongodb').ObjectId;
 const port=process.env.local || 5000
 var admin = require("firebase-admin");
 
 
 var serviceAccount = require("./doctors-portal-63609-firebase-adminsdk.json");
-const { request } = require('express');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
@@ -41,6 +41,7 @@ async function run(){
            const database=client.db('doctors_portal');
            const appointmentCollection=database.collection('appointment');
            const usersCollection=database.collection('users');
+
         app.get('/appointments',async(req,res)=>{
        
             const email=req.query.email;
@@ -52,6 +53,13 @@ async function run(){
          
             const appointments=await cursor.toArray();
             res.json(appointments)
+        })
+
+        app.get('/appointments/:id',async(req,res)=>{
+            const id=req.params.id;
+            const query={_id:ObjectId(id)}
+            const result=await appointmentCollection.findOne(query);
+            res.send(result)
         })
 
        app.post('/appointments',async(req,res)=>{
